@@ -1,0 +1,23 @@
+{
+  "users": [
+    { "id": "mandy",
+      "name": "Amanda",
+      "friends": ["angel", "psy"] 
+    },
+    { "id": "angel2k",
+      "name": "Angel",
+      "friends": ["mandy"] 
+    },
+    { "id": "psy",
+      "name": "Leo",
+      "friends": ["mandy", "fmaluco"] 
+    },
+    { "id": "fmaluco",
+      "name": "Felipe",
+      "friends": ["psy"] 
+    }
+  ],
+  "channels": [
+    { "id": 1, "title": "Grupo Pokemon", "url": "teste/@poke123" }
+  ],
+}
