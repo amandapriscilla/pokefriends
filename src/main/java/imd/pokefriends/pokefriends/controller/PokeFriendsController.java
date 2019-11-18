@@ -1,5 +1,6 @@
 package imd.pokefriends.pokefriends.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,8 +29,15 @@ public class PokeFriendsController {
 	@Autowired
 	private LoginUtils loginUtils;
 	
-	@RequestMapping(value = "/user", method =  RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
-    public User Post(@Valid @RequestBody User user) throws Exception
+	
+	@RequestMapping(value = "/users", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    public List<User> getUsers() {
+		return userRepository.findAll();
+    }
+	
+	
+	@RequestMapping(value = "/user", method =  RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE })
+    public User create(@Valid @RequestBody User user) throws Exception
     {
 		user.setPassword(loginUtils.getSafePassword(user.getPassword()));
         return userRepository.save(user);
@@ -47,7 +56,9 @@ public class PokeFriendsController {
            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
-	@RequestMapping(value = "/user/{id}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+	
+	
+	@RequestMapping(value = "/users/{id}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<User> findUser(@PathVariable(value = "id") long id)
     {
         Optional<User> user = userRepository.findById(id);
@@ -57,6 +68,25 @@ public class PokeFriendsController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+	@PutMapping("/users/{id}")
+	public User replaceEmployee(@RequestBody User newUser, @PathVariable Long id) {
+
+	    return userRepository.findById(id)
+	      .map(user -> {
+	        user.setUsername(newUser.getUsername());
+	        user.setFriends(newUser.getFriends());
+	        return userRepository.save(user);
+	      })
+	      .orElseGet(() -> {
+	    	newUser.setId(id);
+	    	try {
+	    		newUser.setPassword(loginUtils.getSafePassword(newUser.getPassword()));
+	    	} catch (Exception e) {
+				// TODO: handle exception
+			}
+	        return userRepository.save(newUser);
+	      });
+	  }
 
 	
 }
