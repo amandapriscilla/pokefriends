@@ -1,8 +1,19 @@
+buildscript {
+	ext {
+		springBootVersion = '2.2.1.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
 plugins {
 	id 'org.springframework.boot' version '2.2.1.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
 	id 'java'
-	id 'war'
 }
 
 
@@ -13,7 +24,7 @@ jar {
 }
 
 group = 'imd.pokefriends'
-version = '0.0.1-SNAPSHOT'
+version = '1.0'
 sourceCompatibility = '1.8'
 
 configurations {
@@ -30,15 +41,12 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.session:spring-session-core'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	
-	compile('org.springframework.boot:spring-boot-starter-jdbc')
 	compile("org.postgresql:postgresql:9.4-1200-jdbc41") 
 }
 
