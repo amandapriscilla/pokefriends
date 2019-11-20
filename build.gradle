@@ -30,14 +30,9 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
-	testImplementation 'org.springframework.security:spring-security-test'
 	
 	compile('org.springframework.boot:spring-boot-starter-jdbc')
 	compile("org.postgresql:postgresql:9.4-1200-jdbc41") 
-}
-
-test {
-	useJUnitPlatform()
 }
 
 task stage(dependsOn: ['build', 'clean'])
