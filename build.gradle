@@ -5,7 +5,6 @@ plugins {
 	id 'war'
 }
 
-mainClassName = 'imd.pokefriends.pokefriends.PokefriendsApplication'
 
 jar {
   manifest {
