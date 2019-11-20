@@ -24,11 +24,7 @@ import imd.pokefriends.pokefriends.utils.LoginUtils;
 @RequestMapping("/api")
 public class PokeFriendsController {
 	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
-	private LoginUtils loginUtils;
-	
+	private UserRepository userRepository;	
 	
 	@RequestMapping(value = "/users", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     public List<User> getUsers() {
@@ -39,7 +35,7 @@ public class PokeFriendsController {
 	@RequestMapping(value = "/user", method =  RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE })
     public User create(@Valid @RequestBody User user) throws Exception
     {
-		user.setPassword(loginUtils.getSafePassword(user.getPassword()));
+		user.setPassword(LoginUtils.getSafePassword(user.getPassword()));
         return userRepository.save(user);
     }
 	
@@ -48,7 +44,7 @@ public class PokeFriendsController {
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<User> getUser(@RequestBody User user) throws Exception {
 		
-		String safePassword = loginUtils.getSafePassword(user.getPassword());
+		String safePassword = LoginUtils.getSafePassword(user.getPassword());
 		Optional<User> loggedUser = userRepository.findByUsernameAndPassword(user.getUsername(), safePassword);
        if(loggedUser.isPresent())
            return new ResponseEntity<User>(loggedUser.get(), HttpStatus.OK);
@@ -80,7 +76,7 @@ public class PokeFriendsController {
 	      .orElseGet(() -> {
 	    	newUser.setId(id);
 	    	try {
-	    		newUser.setPassword(loginUtils.getSafePassword(newUser.getPassword()));
+	    		newUser.setPassword(LoginUtils.getSafePassword(newUser.getPassword()));
 	    	} catch (Exception e) {
 				// TODO: handle exception
 			}
