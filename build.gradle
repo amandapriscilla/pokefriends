@@ -5,6 +5,14 @@ plugins {
 	id 'war'
 }
 
+mainClassName = 'imd.pokefriends.pokefriends.PokefriendsApplication'
+
+jar {
+  manifest {
+    attributes 'Main-Class' : 'imd.pokefriends.pokefriends.PokefriendsApplication'
+  }
+}
+
 group = 'imd.pokefriends'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
@@ -35,11 +43,6 @@ dependencies {
 	compile("org.postgresql:postgresql:9.4-1200-jdbc41") 
 }
 
-jar {
-  manifest {
-    attributes 'Main-Class' : 'imd.pokefriends.pokefriends.PokefriendsApplication'
-  }
-}
 
 task stage(dependsOn: ['build', 'clean'])
 build.mustRunAfter clean
