@@ -35,6 +35,12 @@ dependencies {
 	compile("org.postgresql:postgresql:9.4-1200-jdbc41") 
 }
 
+jar {
+  manifest {
+    attributes 'Main-Class' : 'imd.pokefriends.pokefriends.PokefriendsApplication'
+  }
+}
+
 task stage(dependsOn: ['build', 'clean'])
 build.mustRunAfter clean
 
