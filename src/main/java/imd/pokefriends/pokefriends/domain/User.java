@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -18,17 +19,14 @@ import org.hibernate.annotations.Parameter;
 @Table(name="user", schema="public")
 public class User implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
-	@GeneratedValue(generator = "user-seq-generator")
-    @GenericGenerator(
-      name = "user-seq-generator",
-      strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-      parameters = {
-        @Parameter(name = "sequence_name", value = "id_user_seq"),
-        @Parameter(name = "initial_value", value = "1"),
-        @Parameter(name = "increment_size", value = "1")
-        }
-    )
+	@Column(name = "id", unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(nullable = false)
