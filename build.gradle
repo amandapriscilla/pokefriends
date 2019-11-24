@@ -10,11 +10,10 @@ buildscript {
 	}
 }
 
-plugins {
-	id 'org.springframework.boot' version '2.2.1.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
-	id 'java'
-}
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
 
 
 jar {
@@ -27,37 +26,13 @@ group = 'imd.pokefriends'
 version = '1.0'
 sourceCompatibility = '1.8'
 
-configurations {
-	developmentOnly
-	runtimeClasspath {
-		extendsFrom developmentOnly
-	}
-}
-
 repositories {
 	mavenCentral()
 }
 
 dependencies {
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '1.2.0.RELEASE'
-
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-	implementation 'org.springframework.session:spring-session-core'
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	
-	compile("org.postgresql:postgresql:9.4-1200-jdbc41") 
 }
-
-
-task stage(dependsOn: ['build', 'clean'])
-build.mustRunAfter clean
-
-task copyToLib(type: Copy) {
-    into "$buildDir/libs"
-    from(configurations.compile)
-}
-
-stage.dependsOn(copyToLib)
