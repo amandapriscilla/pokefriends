@@ -37,7 +37,10 @@ public class User implements Serializable {
 	
 	@OneToMany(mappedBy="user", fetch=FetchType.EAGER)
 	private List<Friend> friends;
-
+	
+	private String messages;
+	
+	
 	public long getId() {
         return id;
     }
@@ -69,4 +72,13 @@ public class User implements Serializable {
 	public void setFriends(List<Friend> friends) {
 		this.friends = friends;
 	}
+	
+	public String getMessages() {
+		return messages;
+	}
+
+	public void setMessages(String messages) {
+		this.messages = messages;
+	}
+
 }

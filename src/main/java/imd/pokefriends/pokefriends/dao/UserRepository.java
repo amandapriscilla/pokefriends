@@ -11,4 +11,7 @@ import imd.pokefriends.pokefriends.domain.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
 	public Optional<User> findByUsernameAndPassword(String login, String password);
+	
+	public Optional<User> findByUsername(String login);
+
 }

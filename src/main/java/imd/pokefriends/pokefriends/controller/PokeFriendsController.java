@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import imd.pokefriends.pokefriends.dao.FriendRepository;
 import imd.pokefriends.pokefriends.dao.UserRepository;
+import imd.pokefriends.pokefriends.domain.Friend;
 import imd.pokefriends.pokefriends.domain.User;
 import imd.pokefriends.pokefriends.utils.LoginUtils;
 
@@ -24,7 +26,10 @@ import imd.pokefriends.pokefriends.utils.LoginUtils;
 @RequestMapping("/api")
 public class PokeFriendsController {
 	@Autowired
-	private UserRepository userRepository;	
+	private UserRepository userRepository;
+	
+	@Autowired
+	private FriendRepository friendRepository;
 	
 	@RequestMapping(value = "/users", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     public List<User> getUsers() {
@@ -65,7 +70,7 @@ public class PokeFriendsController {
     }
 
 	@PutMapping("/users/{id}")
-	public User replaceEmployee(@RequestBody User newUser, @PathVariable Long id) {
+	public User replaceUser(@RequestBody User newUser, @PathVariable Long id) {
 
 	    return userRepository.findById(id)
 	      .map(user -> {
@@ -84,5 +89,36 @@ public class PokeFriendsController {
 	      });
 	  }
 
+	@RequestMapping(value = "/friend", method =  RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE })
+    public Friend create(@Valid @RequestBody Friend friend) throws Exception
+    {
+		User user = userRepository.getOne(friend.getUser().getId());
+		friend.setUser(user);
+		Optional<User> userFriend = userRepository.findByUsername(friend.getUsername());
+		if (userFriend.isPresent()) {
+			friend.setFriend(userFriend.get());
+		}
+		
+        return friendRepository.save(friend);
+    }
 	
+	
+	@RequestMapping(value = "/message/{id}", method =  RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE })
+    public Boolean sendMessage(@RequestBody String message, @PathVariable Long id) throws Exception
+    {
+		try {
+			User user = userRepository.getOne(id);
+			if (user.getMessages() == null || user.getMessages().trim().length() == 0) {
+				user.setMessages(message);
+			} else {
+				user.setMessages(user.getMessages() +  "\n" + message);
+			}
+					
+	        userRepository.save(user);
+	        return true;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+    }
 }
