@@ -62,10 +62,12 @@ public class PokeFriendsController {
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<User> findUser(@PathVariable(value = "id") long id)
     {
-        Optional<User> user = userRepository.findById(id);
-        if(user.isPresent())
-            return new ResponseEntity<User>(user.get(), HttpStatus.OK);
-        else
+        Optional<User> possibleUser = userRepository.findById(id);
+        if(possibleUser.isPresent()) {
+        	User user = possibleUser.get();
+        	user.setFriends(friendRepository.findByUser(user));
+            return new ResponseEntity<User>(user, HttpStatus.OK);
+        } else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 

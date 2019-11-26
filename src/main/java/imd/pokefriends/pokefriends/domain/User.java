@@ -11,9 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="user", schema="public")
@@ -35,7 +33,7 @@ public class User implements Serializable {
 	@Column(nullable = false)
     private String password;
 	
-	@OneToMany(mappedBy="user", fetch=FetchType.LAZY)
+	@Transient
 	private List<Friend> friends;
 	
 	private String messages;
