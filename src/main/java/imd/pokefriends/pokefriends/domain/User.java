@@ -35,7 +35,7 @@ public class User implements Serializable {
 	@Column(nullable = false)
     private String password;
 	
-	@OneToMany(mappedBy="user", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="user", fetch=FetchType.LAZY)
 	private List<Friend> friends;
 	
 	private String messages;
