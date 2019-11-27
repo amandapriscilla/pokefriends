@@ -91,8 +91,9 @@ public class PokeFriendsController {
      	   for (Friend friend : friends) {
      		   friend.setUser(userForFriend);
      		   if (friend.getFriendUser() != null) {
-     			   friend.getFriendUser().setFriends(null);
-     			   friend.getFriendUser().setMessages(null);
+     			  friend.getFriendUser().setPassword(null);
+     			  friend.getFriendUser().setFriends(null);
+     			  friend.getFriendUser().setMessages(null);
      		   }
      	   }
      	  user.setFriends(friends);
