@@ -47,13 +47,15 @@ public class PokeFriendsController {
 	@RequestMapping(value = "/login",method = RequestMethod.POST, 
 			consumes = { MediaType.APPLICATION_JSON_VALUE }, 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<User> getUser(@RequestBody User user) throws Exception {
+	public ResponseEntity<User> loginUser(@RequestBody User user) throws Exception {
 		
 		String safePassword = LoginUtils.getSafePassword(user.getPassword());
 		Optional<User> loggedUser = userRepository.findByUsernameAndPassword(user.getUsername(), safePassword);
-       if(loggedUser.isPresent())
+       if(loggedUser.isPresent()) {
+    	   user = loggedUser.get();
+    	   user.setFriends(friendRepository.findByUser(user));
            return new ResponseEntity<User>(loggedUser.get(), HttpStatus.OK);
-       else
+       } else
            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
@@ -67,13 +69,6 @@ public class PokeFriendsController {
         	User user = possibleUser.get();
         	user.setFriends(friendRepository.findByUser(user));
         	
-        	User dbUser = new User();
-        	dbUser.setId(user.getId());
-        	dbUser.setUsername(user.getUsername());
-        	
-        	for (Friend friend : user.getFriends()) {
-				friend.setUser(dbUser);
-			}
         	
             return new ResponseEntity<User>(user, HttpStatus.OK);
         } else
@@ -83,8 +78,7 @@ public class PokeFriendsController {
 	@RequestMapping(value = "/friends/user/{id}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<List<Friend>> findUserFriends(@PathVariable(value = "id") long id)
     {
-		User user = new User();
-		user.setId(id);
+		User user = userRepository.getOne(id);
         List<Friend> friends = friendRepository.findByUser(user);
         return new ResponseEntity<List<Friend>>(friends, HttpStatus.OK);
         
