@@ -146,6 +146,29 @@ public class PokeFriendsController {
         return friendRepository.save(friend);
     }
 	
+	@PutMapping("/friend/{id}")
+	public Friend replaceFriend(@RequestBody Friend newFriend, @PathVariable Long id) {
+
+	    return friendRepository.findById(id)
+	      .map(friend -> {
+	        friend.setUsername(newFriend.getUsername());
+	        friend.setDaysToUpgrade(newFriend.getDaysToUpgrade());
+	        friend.setFriendshipLevel(newFriend.getFriendshipLevel());
+	        if (newFriend.getFriendUser() != null) {
+	        	if (friend.getFriendUser().getId() != newFriend.getFriendUser().getId()) {
+	        		friend.setFriendUser(newFriend.getFriendUser());
+	        	}
+	        } else {
+	        	friend.setFriendUser(null);
+	        }
+	        return friendRepository.save(friend);
+	      })
+	      .orElseGet(() -> {
+	    	
+	        return null;
+	      });
+	  }
+	
 	
 	@RequestMapping(value = "/message/{id}", method =  RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE })
     public Boolean sendMessage(@RequestBody String message, @PathVariable Long id) throws Exception
