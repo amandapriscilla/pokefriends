@@ -146,12 +146,13 @@ public class PokeFriendsController {
         return friendRepository.save(friend);
     }
 	
-	@PutMapping("/friend/{id}")
+	@RequestMapping(value = "/friend/{id}", method =  RequestMethod.PUT, produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE })
 	public Friend replaceFriend(@RequestBody Friend newFriend, @PathVariable Long id) {
 
-	    return friendRepository.findById(id)
-	      .map(friend -> {
-	        friend.setUsername(newFriend.getUsername());
+		Friend friend = friendRepository.getOne(id);
+		
+		if (friend != null) {
+			friend.setUsername(newFriend.getUsername());
 	        friend.setDaysToUpgrade(newFriend.getDaysToUpgrade());
 	        friend.setFriendshipLevel(newFriend.getFriendshipLevel());
 	        if (newFriend.getFriendUser() != null) {
@@ -161,12 +162,11 @@ public class PokeFriendsController {
 	        } else {
 	        	friend.setFriendUser(null);
 	        }
+	        
 	        return friendRepository.save(friend);
-	      })
-	      .orElseGet(() -> {
-	    	
-	        return null;
-	      });
+		}
+		
+		return null;
 	  }
 	
 	
