@@ -34,11 +34,11 @@ public class Friend implements Serializable {
 	@Column(name="days_to_upgrade")
 	private int daysToUpgrade;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "id_user", nullable=false)
 	private User user;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "id_user_friend", nullable=true)
 	private User friend;
 
