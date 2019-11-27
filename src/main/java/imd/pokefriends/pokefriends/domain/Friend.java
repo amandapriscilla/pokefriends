@@ -40,7 +40,7 @@ public class Friend implements Serializable {
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "id_user_friend", nullable=true)
-	private User friend;
+	private User friendUser;
 
 	public long getId() {
 		return id;
@@ -82,12 +82,12 @@ public class Friend implements Serializable {
 		this.user = user;
 	}
 	
-	public User getFriend() {
-		return friend;
+	public User getFriendUser() {
+		return friendUser;
 	}
 
-	public void setFriend(User friend) {
-		this.friend = friend;
+	public void setFriendUser(User friend) {
+		this.friendUser = friend;
 	}
 	
 	

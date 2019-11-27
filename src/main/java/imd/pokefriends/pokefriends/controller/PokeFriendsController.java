@@ -61,9 +61,10 @@ public class PokeFriendsController {
        	
     	   for (Friend friend : friends) {
     		   friend.setUser(userForFriend);
-    		   if (friend.getFriend() != null) {
-    			   friend.getFriend().setFriends(null);
-    			   friend.getFriend().setMessages(null);
+    		   if (friend.getFriendUser() != null) {
+    			   friend.getFriendUser().setPassword(null);
+    			   friend.getFriendUser().setFriends(null);
+    			   friend.getFriendUser().setMessages(null);
     		   }
     	   }
     	  user.setFriends(friends);    	   
@@ -89,9 +90,9 @@ public class PokeFriendsController {
         	
      	   for (Friend friend : friends) {
      		   friend.setUser(userForFriend);
-     		   if (friend.getFriend() != null) {
-     			   friend.getFriend().setFriends(null);
-     			   friend.getFriend().setMessages(null);
+     		   if (friend.getFriendUser() != null) {
+     			   friend.getFriendUser().setFriends(null);
+     			   friend.getFriendUser().setMessages(null);
      		   }
      	   }
      	  user.setFriends(friends);
@@ -138,7 +139,7 @@ public class PokeFriendsController {
 		friend.setUser(user);
 		Optional<User> userFriend = userRepository.findByUsername(friend.getUsername());
 		if (userFriend.isPresent()) {
-			friend.setFriend(userFriend.get());
+			friend.setFriendUser(userFriend.get());
 		}
 		
         return friendRepository.save(friend);
