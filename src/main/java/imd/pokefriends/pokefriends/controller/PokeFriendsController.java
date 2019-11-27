@@ -52,8 +52,22 @@ public class PokeFriendsController {
 		String safePassword = LoginUtils.getSafePassword(user.getPassword());
 		Optional<User> loggedUser = userRepository.findByUsernameAndPassword(user.getUsername(), safePassword);
        if(loggedUser.isPresent()) {
-    	   user = loggedUser.get();
-    	   user.setFriends(friendRepository.findByUser(user));
+    	  user = loggedUser.get();
+    	  User userForFriend = new User();
+       	  userForFriend.setId(user.getId());
+       	  userForFriend.setUsername(user.getUsername());
+       	
+          List<Friend> friends = friendRepository.findByUser(user);
+       	
+    	   for (Friend friend : friends) {
+    		   friend.setUser(userForFriend);
+    		   if (friend.getFriend() != null) {
+    			   friend.getFriend().setFriends(null);
+    			   friend.getFriend().setMessages(null);
+    		   }
+    	   }
+    	  user.setFriends(friends);    	   
+    	   
            return new ResponseEntity<User>(loggedUser.get(), HttpStatus.OK);
        } else
            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -67,8 +81,20 @@ public class PokeFriendsController {
         Optional<User> possibleUser = userRepository.findById(id);
         if(possibleUser.isPresent()) {
         	User user = possibleUser.get();
-        	user.setFriends(friendRepository.findByUser(user));
+        	User userForFriend = new User();
+        	userForFriend.setId(user.getId());
+        	userForFriend.setUsername(user.getUsername());
         	
+           List<Friend> friends = friendRepository.findByUser(user);
+        	
+     	   for (Friend friend : friends) {
+     		   friend.setUser(userForFriend);
+     		   if (friend.getFriend() != null) {
+     			   friend.getFriend().setFriends(null);
+     			   friend.getFriend().setMessages(null);
+     		   }
+     	   }
+     	  user.setFriends(friends);
         	
             return new ResponseEntity<User>(user, HttpStatus.OK);
         } else
